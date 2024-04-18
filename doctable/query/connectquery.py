@@ -181,7 +181,7 @@ class ConnectQuery:
             table = dtable.table,
             where = where,
             wherestr = wherestr,
-            preserve_parameter_order = self.is_sequence(values),
+            #preserve_parameter_order = self.is_sequence(values),
         )
         return self.execute_statement(q, values, **kwargs)
 

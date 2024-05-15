@@ -26,11 +26,16 @@ class DBTableBase:
             # handles table['col1']
             return self.table.c[key]
         elif isinstance(key, (tuple,list)):
-            # handles table['col1','col2'], table[('col1','col2')], and table[['col1','col2']]
+            # handles table['col1',], table['col1','col2'], table[('col1','col2')], and table[['col1','col2']]
             return [self.table.c[k] for k in key]
         elif isinstance(key, slice):
             # handles table['col1':'col2']
             all_colnames = [c.name for c in self.table.columns]
+            
+            # handles table[:]
+            if key == slice(None):
+                return [self.table.c[k] for k in all_colnames]
+            
             try:
                 start = all_colnames.index(key.start)
                 end = all_colnames.index(key.stop)
@@ -45,6 +50,12 @@ class DBTableBase:
     
     def __call__(self, *columns) -> typing.List[sqlalchemy.Column]:
         return self.cols(*columns)
+    
+    def __enter__(self) -> typing.Self:
+        return self
+    
+    def __exit__(self, type, value, traceback):
+        pass
 
     def cols(self, *columns) -> typing.List[sqlalchemy.Column]:
         '''Return a query with only the specified columns.'''

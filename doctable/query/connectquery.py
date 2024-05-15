@@ -4,6 +4,7 @@ import dataclasses
 import typing
 import sqlalchemy
 import sqlalchemy.exc
+import sqlalchemy.engine
 import pandas as pd
 
 from .statementbuilder import StatementBuilder
